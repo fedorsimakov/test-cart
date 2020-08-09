@@ -59,7 +59,7 @@ class CartTest extends TestCase
         $this->assertEquals(5.2035, $cart->calculateTotalDiscount());
     }
 
-    public function testCalculateTotalProduct()
+    public function testCalculateTotalProductCost()
     {
         $products = [
             new Product('A', 3.25),
@@ -75,32 +75,6 @@ class CartTest extends TestCase
         $cart = new Cart($productCatalog);
         $cart->addProducts(['C','A','C','B','A','D','A','E','F','D']);
 
-        $this->assertEquals(84.6, $cart->calculateTotalProduct());
-    }
-
-    public function testCalculateTotalCost()
-    {
-        $products = [
-            new Product('A', 3.25),
-            new Product('B', 2.47),
-            new Product('C', 7.23),
-            new Product('D', 22.23),
-            new Product('E', 4.23),
-            new Product('F', 9.23)
-        ];
-
-        $productCatalog = new ProductCatalog($products);
-
-        $cart = new Cart($productCatalog);
-        $cart->addProducts(['C','A','C','B','A','D','A','E','F','D']);
-        $setOfProductsManyDiscount = new SetOfProductsManyDiscount(['A','C'], 10);
-        $setOfProductsSingleDiscount = new SetOfProductsSingleDiscount('A', ['E','D','F'], 10);
-        $quantityOfProductsDiscount = new QuantityOfProductsDiscount(['B'], 3, 5);
-        $cart->addDiscounts(
-            [$setOfProductsManyDiscount,$setOfProductsSingleDiscount],
-            [$quantityOfProductsDiscount]
-        );
-
-        $this->assertEquals(79.3965, $cart->calculateTotalCost());
+        $this->assertEquals(84.6, $cart->calculateTotalProductCost());
     }
 }

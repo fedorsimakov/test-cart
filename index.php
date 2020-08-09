@@ -44,10 +44,10 @@ $cart = new Cart($productCatalog);
 $cart->addProducts(['A','C','A','B','K','M','I','D','F','M','K']);
 $cart->addDiscounts($setOfProductsDiscountRules, $quantityOfProductsDiscountRules);
 
-$totalProduct = round($cart->calculateTotalProduct(), 2);
+$totalProductCost = round($cart->calculateTotalProductCost(), 2);
 $totalDiscout = round($cart->calculateTotalDiscount(), 2);
-$totalCost = round($cart->calculateTotalCost(), 2);
+$totalCost = $totalProductCost - $totalDiscout;
 
-print_r("Общая стоимость товаров: {$totalProduct}\n");
+print_r("Общая стоимость товаров: {$totalProductCost}\n");
 print_r("Скидка: {$totalDiscout}\n");
 print_r("Общая стоимость товаров с учетом скидки: {$totalCost}\n");

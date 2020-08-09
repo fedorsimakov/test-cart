@@ -50,7 +50,7 @@ class ProductList
         return array_key_exists($productName, $this->getList());
     }
 
-    public function getIntersectKeyList(array $productNames): array
+    public function getIntersectKeyArray(array $productNames): array
     {
         return array_values(array_filter($productNames, function ($productName) {
             return $this->isProductExist($productName);

@@ -22,7 +22,7 @@ class SetOfProductsSingleDiscount implements DiscountInterface
     public function isApplyDiscount(ProductList $productList): bool
     {
         $isFirstProductExist = $productList->isProductExist($this->productDiscountList[0]);
-        $isSecondProductsExist = !empty($productList->getIntersectKeyList($this->productDiscountList[1]));
+        $isSecondProductsExist = !empty($productList->getIntersectKeyArray($this->productDiscountList[1]));
         
         return $isFirstProductExist && $isSecondProductsExist;
     }
@@ -32,7 +32,7 @@ class SetOfProductsSingleDiscount implements DiscountInterface
         if ($this->isApplyDiscount($productList)) {
             return [
                 $this->productDiscountList[0],
-                $productList->getIntersectKeyList($this->productDiscountList[1])[0]
+                $productList->getIntersectKeyArray($this->productDiscountList[1])[0]
             ];
         }
 

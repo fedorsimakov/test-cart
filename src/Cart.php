@@ -98,17 +98,12 @@ class Cart
         return $totalDiscount;
     }
 
-    public function calculateTotalProduct(): float
+    public function calculateTotalProductCost(): float
     {
         $productList = $this->productList->getList();
 
         return array_reduce(array_keys($productList), function ($acc, $item) use ($productList) {
             return $acc += $this->productCatalog->getProductByName($item)->getPrice() * $productList[$item];
         }, 0);
-    }
-
-    public function calculateTotalCost(): float
-    {
-        return $this->calculateTotalProduct() - $this->calculateTotalDiscount();
     }
 }

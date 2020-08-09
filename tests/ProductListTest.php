@@ -33,9 +33,9 @@ class ProductListTest extends TestCase
     {
         $productList = new ProductList(['A','C','C','D','E']);
 
-        $this->assertEquals(['D','C'], $productList->getIntersectKeyList(['J','D','M','C']));
-        $this->assertEquals([], $productList->getIntersectKeyList(['J','M']));
-        $this->assertEquals([], $productList->getIntersectKeyList([]));
+        $this->assertEquals(['D','C'], $productList->getIntersectKeyArray(['J','D','M','C']));
+        $this->assertEquals([], $productList->getIntersectKeyArray(['J','M']));
+        $this->assertEquals([], $productList->getIntersectKeyArray([]));
     }
 
     public function testSortByProductPrice()
