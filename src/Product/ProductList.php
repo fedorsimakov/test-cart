@@ -43,13 +43,17 @@ class ProductList
 
     public function deleteProduct(string $productName)
     {
-        $list = $this->getList();
-        if ($this->isProductExist($productName) && $list[$productName] > 1) {
-            $list[$productName] -= 1;
-        } else {
-            unset($list[$productName]);
+        if ($this->isProductExist($productName)) {
+            $list = $this->getList();
+
+            if ($list[$productName] > 1) {
+                $list[$productName] -= 1;
+            } else {
+                unset($list[$productName]);
+            }
+
+            $this->list = $list;
         }
-        $this->list = $list;
     }
 
     public function isProductExist(string $productName): bool
