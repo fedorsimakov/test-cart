@@ -12,7 +12,16 @@ class SetOfProductsManyDiscountTest extends TestCase
 {
     public function testGetProductListForApplyDiscount()
     {
-        $productList = new ProductList(['A','B','C','C','D','A','B']);
+        $products = [
+            new Product('A', 3.25),
+            new Product('B', 2.47),
+            new Product('C', 7.23),
+            new Product('D', 14.23)
+        ];
+
+        $productCatalog = new ProductCatalog($products);
+
+        $productList = new ProductList(['A','B','C','C','D','A','B'], $productCatalog);
         $setOfProductsManyDiscount = new SetOfProductsManyDiscount(['A','C','B'], 10);
 
         $this->assertEquals(
@@ -38,7 +47,7 @@ class SetOfProductsManyDiscountTest extends TestCase
 
         $productCatalog = new ProductCatalog($products);
 
-        $productList = new ProductList(['C','A','C','B','A']);
+        $productList = new ProductList(['C','A','C','B','A'], $productCatalog);
 
         $setOfProductsManyDiscount = new SetOfProductsManyDiscount(['A', 'C'], 10);
 
@@ -47,7 +56,7 @@ class SetOfProductsManyDiscountTest extends TestCase
             $setOfProductsManyDiscount->getAmountOfDiscountTotal($productList, $productCatalog)
         );
 
-        $productList = new ProductList(['B','B','B','B','A']);
+        $productList = new ProductList(['B','B','B','B','A'], $productCatalog);
       
         $this->assertEquals(
             0,

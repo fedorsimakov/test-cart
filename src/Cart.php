@@ -2,19 +2,18 @@
 
 namespace Fedorsimakov\Test\Cart;
 
+use Fedorsimakov\Test\Cart\Product\ProductCatalog;
 use Fedorsimakov\Test\Cart\Product\ProductList;
 use Fedorsimakov\Test\Cart\Discount\DiscountInterface;
-use Fedorsimakov\Test\Cart\Product\ProductCatalog;
 
 class Cart
 {
-    private $productCatalog = [];
+    private $productCatalog;
+    private $productList;
+    private $productListWithoutApplyDiscount;
+    private $productListWithApplyDiscount;
 
-    private $productList = [];
-    private $productWithoutApplyDiscount = [];
-    private $productWithApplyDiscount = [];
-
-    private $discountList = [
+    private $discountArray = [
         'setOfProducts' => [],
         'quantityOfProducts' => []
     ];
@@ -22,59 +21,58 @@ class Cart
     public function __construct(ProductCatalog $productCatalog)
     {
         $this->productCatalog = $productCatalog;
-
-        $this->productList = new ProductList([]);
-        $this->productWithoutApplyDiscount = new ProductList([]);
-        $this->productWithApplyDiscount = new ProductList([]);
+        $this->productList = new ProductList([], $productCatalog);
+        $this->productListWithoutApplyDiscount = new ProductList([], $productCatalog);
+        $this->productListWithApplyDiscount = new ProductList([], $productCatalog);
     }
 
     public function addDiscounts(array $setOfProductsDiscounts, array $quantityOfProductsDiscounts)
     {
-        $this->discountList['setOfProducts'] = $setOfProductsDiscounts;
-        $this->discountList['quantityOfProducts'] = $quantityOfProductsDiscounts;
+        $this->discountArray['setOfProducts'] = $setOfProductsDiscounts;
+        $this->discountArray['quantityOfProducts'] = $quantityOfProductsDiscounts;
     }
 
     public function reloadProductLists()
     {
-        $this->productWithoutApplyDiscount = new ProductList($this->productList->toArray());
-        $this->productWithApplyDiscount = new ProductList([]);
+        $this->productListWithoutApplyDiscount = new ProductList($this->productList->toArray(), $this->productCatalog);
+        $this->productListWithApplyDiscount = new ProductList([], $this->productCatalog);
     }
 
     public function addProducts(array $productNames)
     {
         $this->productList->addProducts($productNames);
-        $this->productList->sortByProductPrice($this->productCatalog);
+        $this->productList->sortByProductPrice();
         $this->reloadProductLists();
     }
 
     public function addProduct(string $productName)
     {
         $this->productList->addProduct($productName);
-        $this->productList->sortByProductPrice($this->productCatalog);
+        $this->productList->sortByProductPrice();
         $this->reloadProductLists();
     }
 
     public function deleteProducts(array $productNames)
     {
         $this->productList->deleteProducts($productNames);
-        $this->productList->sortByProductPrice($this->productCatalog);
+        $this->productList->sortByProductPrice();
         $this->reloadProductLists();
     }
 
     public function deleteProduct(string $productName)
     {
         $this->productList->deleteProduct($productName);
-        $this->productList->sortByProductPrice($this->productCatalog);
+        $this->productList->sortByProductPrice();
         $this->reloadProductLists();
     }
 
     public function calculateDiscount(DiscountInterface $discount): float
     {
-        $productArrayForApplyDiscount = $discount->getProductArrayForApplyDiscount($this->productWithoutApplyDiscount);
-        $result = $discount->getAmountOfDiscountTotal($this->productWithoutApplyDiscount, $this->productCatalog);
+        $productArrayForApplyDiscount = $discount->getProductArrayForApplyDiscount($this->productListWithoutApplyDiscount);
+        $result = $discount->getAmountOfDiscountTotal($this->productListWithoutApplyDiscount);
 
-        $this->productWithApplyDiscount->addProducts($productArrayForApplyDiscount);
-        $this->productWithoutApplyDiscount->deleteProducts($productArrayForApplyDiscount);
+        $this->productListWithApplyDiscount->addProducts($productArrayForApplyDiscount);
+        $this->productListWithoutApplyDiscount->deleteProducts($productArrayForApplyDiscount);
 
         return $result;
     }
@@ -82,12 +80,12 @@ class Cart
     public function calculateTotalDiscount(): float
     {
         $totalDiscount = 0;
-        $discountList = $this->discountList;
-        foreach ($discountList['setOfProducts'] as $discount) {
+        $discountArray = $this->discountArray;
+        foreach ($discountArray['setOfProducts'] as $discount) {
             $currDiscount = $this->calculateDiscount($discount);
             $totalDiscount += $currDiscount;
         }
-        foreach ($discountList['quantityOfProducts'] as $discount) {
+        foreach ($discountArray['quantityOfProducts'] as $discount) {
             $currDiscount = $this->calculateDiscount($discount);
             if (!empty($currDiscount)) {
                 $totalDiscount += $currDiscount;

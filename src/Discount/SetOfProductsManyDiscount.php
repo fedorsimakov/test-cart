@@ -2,7 +2,6 @@
 
 namespace Fedorsimakov\Test\Cart\Discount;
 
-use Fedorsimakov\Test\Cart\Product\ProductCatalog;
 use Fedorsimakov\Test\Cart\Product\ProductList;
 
 class SetOfProductsManyDiscount implements DiscountInterface
@@ -45,11 +44,11 @@ class SetOfProductsManyDiscount implements DiscountInterface
         return min($manyCountArray);
     }
 
-    public function getAmountOfDiscountTotal(ProductList $productList, ProductCatalog $productCatalog): float
+    public function getAmountOfDiscountTotal(ProductList $productList): float
     {
         $manyCount = $this->getManyCount($productList);
-        $totalPrice = array_reduce($this->productDiscountList, function ($acc, $item) use ($productCatalog) {
-            return $acc += $productCatalog->getProductByName($item)->getPrice();
+        $totalPrice = array_reduce($this->productDiscountList, function ($acc, $item) use ($productList) {
+            return $acc += $productList->getProductCatalog()->getProductByName($item)->getPrice();
         }, 0);
         return $totalPrice * ($this->amountOfDiscount / 100) * $manyCount;
     }

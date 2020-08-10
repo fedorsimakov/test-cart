@@ -9,5 +9,5 @@ interface DiscountInterface
 {
     public function isApplyDiscount(ProductList $productList);
     public function getProductArrayForApplyDiscount(ProductList $productList);
-    public function getAmountOfDiscountTotal(ProductList $productList, ProductCatalog $productCatalog);
+    public function getAmountOfDiscountTotal(ProductList $productList);
 }

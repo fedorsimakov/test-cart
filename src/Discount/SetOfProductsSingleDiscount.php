@@ -2,7 +2,6 @@
 
 namespace Fedorsimakov\Test\Cart\Discount;
 
-use Fedorsimakov\Test\Cart\Product\ProductCatalog;
 use Fedorsimakov\Test\Cart\Product\ProductList;
 
 class SetOfProductsSingleDiscount implements DiscountInterface
@@ -39,12 +38,12 @@ class SetOfProductsSingleDiscount implements DiscountInterface
         return [];
     }
 
-    public function getAmountOfDiscountTotal(ProductList $productList, ProductCatalog $productCatalog): float
+    public function getAmountOfDiscountTotal(ProductList $productList): float
     {
         $productArrayForApplyDiscount = $this->getProductArrayForApplyDiscount($productList);
         if (!empty($productArrayForApplyDiscount)) {
             $productName = $productArrayForApplyDiscount[1];
-            $productPrice = $productCatalog->getProductByName($productName)->getPrice();
+            $productPrice = $productList->getProductCatalog()->getProductByName($productName)->getPrice();
             return $productPrice * ($this->amountOfDiscount / 100);
         }
         return 0;

@@ -19,7 +19,7 @@ class QuantityOfProductsDiscountTest extends TestCase
 
         $productCatalog = new ProductCatalog([$productA, $productB, $productC, $productD]);
         
-        $productList = new ProductList(['A','B','B','C','C','D','D']);
+        $productList = new ProductList(['A','B','B','C','C','D','D'], $productCatalog);
         $productList->sortByProductPrice($productCatalog);
 
         $quantityOfProductsDiscount = new QuantityOfProductsDiscount(['A','C'], 3, 10);
@@ -52,7 +52,7 @@ class QuantityOfProductsDiscountTest extends TestCase
 
         $productCatalog = new ProductCatalog([$productA, $productB, $productC]);
 
-        $productList = new ProductList(['C','A','C','B','A']);
+        $productList = new ProductList(['C','A','C','B','A'], $productCatalog);
         $productList->sortByProductPrice($productCatalog);
 
         $quantityOfProductsDiscount = new QuantityOfProductsDiscount(['A'], 2, 10);
@@ -76,7 +76,7 @@ class QuantityOfProductsDiscountTest extends TestCase
             $quantityOfProductsDiscount->getAmountOfDiscountTotal($productList, $productCatalog)
         );
 
-        $productList = new ProductList([]);
+        $productList = new ProductList([], $productCatalog);
         $productList->sortByProductPrice($productCatalog);
       
         $this->assertEquals(

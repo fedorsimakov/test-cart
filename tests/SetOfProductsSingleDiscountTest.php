@@ -12,7 +12,16 @@ class SetOfProductsSingleDiscountTest extends TestCase
 {
     public function testGetProductListForApplyDiscount()
     {
-        $productList = new ProductList(['A','B','C','C','D']);
+        $products = [
+            new Product('A', 3.25),
+            new Product('B', 2.47),
+            new Product('C', 7.23),
+            new Product('D', 14.23)
+        ];
+
+        $productCatalog = new ProductCatalog($products);
+
+        $productList = new ProductList(['A','B','C','C','D'], $productCatalog);
         $setOfProductsSingleDiscount = new SetOfProductsSingleDiscount('A', ['M','D','C','K'], 10);
 
         $this->assertEquals(
@@ -30,13 +39,16 @@ class SetOfProductsSingleDiscountTest extends TestCase
 
     public function testGetAmountOfDiscountTotal()
     {
-        $productA = new Product('A', 3.25);
-        $productB = new Product('B', 2.47);
-        $productC = new Product('C', 7.23);
+        $products = [
+            new Product('A', 3.25),
+            new Product('B', 2.47),
+            new Product('C', 7.23),
+            new Product('D', 14.23)
+        ];
 
-        $productCatalog = new ProductCatalog([$productA, $productB, $productC]);
+        $productCatalog = new ProductCatalog($products);
 
-        $productList = new ProductList(['C','A','C','B','A']);
+        $productList = new ProductList(['C','A','C','B','A'], $productCatalog);
 
         $setOfProductsSingleDiscount = new SetOfProductsSingleDiscount('A', ['B','C'], 10);
 
@@ -45,14 +57,14 @@ class SetOfProductsSingleDiscountTest extends TestCase
             $setOfProductsSingleDiscount->getAmountOfDiscountTotal($productList, $productCatalog)
         );
 
-        $productList = new ProductList(['B','B','B','B','D']);
+        $productList = new ProductList(['B','B','B','B','D'], $productCatalog);
       
         $this->assertEquals(
             0,
             $setOfProductsSingleDiscount->getAmountOfDiscountTotal($productList, $productCatalog)
         );
 
-        $productList = new ProductList(['A','A','A']);
+        $productList = new ProductList(['A','A','A'], $productCatalog);
       
         $this->assertEquals(
             0,

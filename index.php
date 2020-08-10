@@ -41,13 +41,18 @@ $quantityOfProductsDiscountRules = [
 ];
 
 $cart = new Cart($productCatalog);
-$cart->addProducts(['A','C','A','B','K','M','I','D','F','M','K']);
 $cart->addDiscounts($setOfProductsDiscountRules, $quantityOfProductsDiscountRules);
 
-$totalProductCost = round($cart->calculateTotalProductCost(), 2);
-$totalDiscout = round($cart->calculateTotalDiscount(), 2);
-$totalCost = $totalProductCost - $totalDiscout;
+try {
+    $cart->addProducts(['A','C','A','B','K','M','I','D','F','M','K']);
 
-print_r("Общая стоимость товаров: {$totalProductCost}\n");
-print_r("Скидка: {$totalDiscout}\n");
-print_r("Общая стоимость товаров с учетом скидки: {$totalCost}\n");
+    $totalProductCost = round($cart->calculateTotalProductCost(), 2);
+    $totalDiscout = round($cart->calculateTotalDiscount(), 2);
+    $totalCost = $totalProductCost - $totalDiscout;
+
+    print_r("Общая стоимость товаров: {$totalProductCost}\n");
+    print_r("Скидка: {$totalDiscout}\n");
+    print_r("Общая стоимость товаров с учетом скидки: {$totalCost}\n");
+} catch (\Exception $e) {
+    echo $e->getMessage() . "\n";
+}

@@ -2,12 +2,16 @@
 
 namespace Fedorsimakov\Test\Cart\Product;
 
+use Fedorsimakov\Test\Cart\Product\ProductCatalog;
+
 class ProductList
 {
+    private $productCatalog;
     private $list = [];
 
-    public function __construct(array $productNames)
+    public function __construct(array $productNames, ProductCatalog $productCatalog)
     {
+        $this->productCatalog = $productCatalog;
         $this->addProducts($productNames);
     }
 
@@ -20,6 +24,9 @@ class ProductList
 
     public function addProduct(string $productName)
     {
+        if (empty($this->productCatalog->getProductByName($productName))) {
+            throw new \Exception("Товара {$productName} нет в каталоге товаров");
+        }
         if ($this->isProductExist($productName)) {
             $this->list[$productName] += 1;
         } else {
@@ -64,6 +71,11 @@ class ProductList
         }, ARRAY_FILTER_USE_KEY);
     }
 
+    public function getProductCatalog(): ProductCatalog
+    {
+        return $this->productCatalog;
+    }
+
     public function getList(): array
     {
         return $this->list;
@@ -82,12 +94,12 @@ class ProductList
         }, []);
     }
 
-    public function sortByProductPrice(ProductCatalog $productCatalog)
+    public function sortByProductPrice()
     {
         $productList = $this->getList();
-        uksort($productList, function ($product1Key, $product2Key) use ($productCatalog) {
-            $product1Price = $productCatalog->getProductByName($product1Key)->getPrice();
-            $product2Price = $productCatalog->getProductByName($product2Key)->getPrice();
+        uksort($productList, function ($product1Key, $product2Key) {
+            $product1Price = $this->productCatalog->getProductByName($product1Key)->getPrice();
+            $product2Price = $this->productCatalog->getProductByName($product2Key)->getPrice();
             return $product1Price <=> $product2Price;
         });
         $this->list = $productList;
