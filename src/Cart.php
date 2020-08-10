@@ -11,7 +11,6 @@ class Cart
     private $productCatalog;
     private $productList;
     private $productListWithoutApplyDiscount;
-    private $productListWithApplyDiscount;
 
     private $discountArray = [
         'setOfProducts' => [],
@@ -23,7 +22,6 @@ class Cart
         $this->productCatalog = $productCatalog;
         $this->productList = new ProductList([], $productCatalog);
         $this->productListWithoutApplyDiscount = new ProductList([], $productCatalog);
-        $this->productListWithApplyDiscount = new ProductList([], $productCatalog);
     }
 
     public function addDiscounts(array $setOfProductsDiscounts, array $quantityOfProductsDiscounts)
@@ -35,7 +33,6 @@ class Cart
     public function reloadProductLists()
     {
         $this->productListWithoutApplyDiscount = new ProductList($this->productList->toArray(), $this->productCatalog);
-        $this->productListWithApplyDiscount = new ProductList([], $this->productCatalog);
     }
 
     public function addProducts(array $productNames)
@@ -71,7 +68,6 @@ class Cart
         $productArrayForApplyDiscount = $discount->getProductArrayForApplyDiscount($this->productListWithoutApplyDiscount);
         $result = $discount->getAmountOfDiscountTotal($this->productListWithoutApplyDiscount);
 
-        $this->productListWithApplyDiscount->addProducts($productArrayForApplyDiscount);
         $this->productListWithoutApplyDiscount->deleteProducts($productArrayForApplyDiscount);
 
         return $result;
