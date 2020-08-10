@@ -2,7 +2,6 @@
 
 namespace Fedorsimakov\Test\Cart\Discount;
 
-use Fedorsimakov\Test\Cart\Product\ProductCatalog;
 use Fedorsimakov\Test\Cart\Product\ProductList;
 
 interface DiscountInterface
